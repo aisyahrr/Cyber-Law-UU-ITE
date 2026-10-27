@@ -1,0 +1,1215 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cyber Law & UU ITE — Portal Presentasi Interaktif</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            display: ['"Space Grotesk"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          },
+          colors: {
+            brand: {
+              50: '#f0f9ff',
+              100: '#e0f2fe',
+              400: '#38bdf8',
+              500: '#0ea5e9',
+              600: '#0284c7',
+              900: '#0c4a6e',
+              dark: '#090d16',
+              card: '#111827',
+              border: '#1f293d',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #090d16;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #1f293d;
+      border-radius: 999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #38bdf8;
+    }
+
+    .glow-cyan {
+      box-shadow: 0 0 45px -10px rgba(56, 189, 248, 0.25);
+    }
+    .glass-panel {
+      background: rgba(17, 24, 39, 0.7);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+  </style>
+</head>
+<body class="bg-brand-dark text-slate-100 font-sans antialiased selection:bg-brand-500 selection:text-white min-h-screen flex flex-col justify-between">
+
+  <!-- TOP NAVIGATION BAR -->
+  <header class="sticky top-0 z-50 glass-panel border-b border-brand-border/60">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      
+      <!-- Brand Logo / Identity -->
+      <div class="flex items-center space-x-3 cursor-pointer" onclick="switchView('deck')">
+        <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-brand-600 to-brand-400 flex items-center justify-center text-slate-950 font-bold text-lg shadow-lg shadow-brand-500/20">
+          <i class="fa-solid fa-scale-balanced"></i>
+        </div>
+        <div>
+          <span class="font-display font-bold text-lg tracking-tight text-white block leading-tight">CYBER<span class="text-brand-400">LAW</span>.io</span>
+          <span class="text-[10px] text-slate-400 tracking-wider uppercase font-mono block">UU ITE &amp; Etika Profesi</span>
+        </div>
+      </div>
+
+      <!-- Center Nav / View Mode Switcher -->
+      <div class="bg-slate-900/80 p-1 rounded-xl border border-slate-800 flex items-center space-x-1">
+        <button id="navBtnDeck" onclick="switchView('deck')" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all duration-200 flex items-center gap-2 bg-brand-500 text-slate-950 shadow-md">
+          <i class="fa-solid fa-desktop"></i>
+          <span class="hidden sm:inline">Slide Deck Mode</span>
+        </button>
+        <button id="navBtnScroll" onclick="switchView('scroll')" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold text-slate-400 hover:text-white transition-all duration-200 flex items-center gap-2">
+          <i class="fa-solid fa-book-open"></i>
+          <span class="hidden sm:inline">Web Reader Mode</span>
+        </button>
+        <button id="navBtnSim" onclick="switchView('sim')" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold text-slate-400 hover:text-white transition-all duration-200 flex items-center gap-2">
+          <i class="fa-solid fa-shield-virus"></i>
+          <span class="hidden sm:inline">Simulasi Kasus</span>
+        </button>
+      </div>
+
+      <!-- Action Tools -->
+      <div class="flex items-center space-x-2">
+        <button onclick="toggleFullScreen()" title="Toggle Layar Penuh (F)" class="w-9 h-9 rounded-lg bg-slate-900 border border-slate-800 text-slate-300 hover:text-brand-400 hover:border-brand-500/50 flex items-center justify-center transition">
+          <i id="fsIcon" class="fa-solid fa-expand text-sm"></i>
+        </button>
+        <button onclick="togglePresenterNotes()" title="Buka Catatan Pembicara" class="w-9 h-9 rounded-lg bg-slate-900 border border-slate-800 text-slate-300 hover:text-brand-400 hover:border-brand-500/50 flex items-center justify-center transition">
+          <i class="fa-regular fa-comment-dots text-sm"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Presentation Progress Bar (Active in Deck Mode) -->
+    <div id="deckProgressBarContainer" class="w-full bg-slate-900 h-1">
+      <div id="deckProgressBar" class="bg-gradient-to-r from-brand-500 to-cyan-300 h-1 transition-all duration-300 ease-out" style="width: 10%;"></div>
+    </div>
+  </header>
+
+  <!-- ======================================================== -->
+  <!-- VIEW 1: INTERACTIVE SLIDE DECK (DEFAULT PRESENTATION)    -->
+  <!-- ======================================================== -->
+  <main id="deckView" class="flex-1 flex flex-col items-center justify-center p-4 sm:p-6 lg:p-8 relative overflow-hidden">
+    <!-- Ambient Background Lighting -->
+    <div class="absolute -top-40 left-1/2 -translate-x-1/2 w-[600px] h-[350px] bg-brand-500/10 blur-[130px] rounded-full pointer-events-none"></div>
+
+    <div class="w-full max-w-5xl mx-auto flex flex-col items-center">
+      
+      <!-- Slide Stage / Frame -->
+      <div id="slideViewport" class="w-full min-h-[520px] sm:h-[560px] glass-panel rounded-2xl border border-brand-border p-6 sm:p-10 flex flex-col justify-between shadow-2xl relative transition-all duration-300">
+        
+        <!-- Slide Content Render Container -->
+        <div id="slideDynamicContent" class="h-full flex flex-col justify-center">
+          <!-- Populated by JavaScript -->
+        </div>
+
+      </div>
+
+      <!-- Slide Deck Controls -->
+      <div class="w-full mt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <!-- Slide Pagination Pill -->
+        <div class="flex items-center gap-3">
+          <span class="font-mono text-xs text-brand-400 font-semibold uppercase tracking-wider bg-brand-950/60 border border-brand-800/60 px-3 py-1.5 rounded-lg">
+            Slide <span id="currentSlideNum">1</span> / <span id="totalSlideNum">10</span>
+          </span>
+          <span id="slideCategoryBadge" class="text-xs text-slate-400 bg-slate-900 border border-slate-800 px-3 py-1.5 rounded-lg hidden sm:inline-block">
+            Pengantar
+          </span>
+        </div>
+
+        <!-- Thumbnail Bullets -->
+        <div id="deckBullets" class="flex items-center gap-1.5">
+          <!-- Populated by JS -->
+        </div>
+
+        <!-- Navigation Buttons -->
+        <div class="flex items-center space-x-2">
+          <button onclick="prevSlide()" class="px-4 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700/70 text-slate-200 text-sm font-medium transition active:scale-95 flex items-center gap-2">
+            <i class="fa-solid fa-arrow-left"></i>
+            <span>Sebelumnya</span>
+          </button>
+          <button onclick="nextSlide()" class="px-5 py-2 rounded-xl bg-brand-500 hover:bg-brand-400 text-slate-950 text-sm font-bold shadow-lg shadow-brand-500/20 transition active:scale-95 flex items-center gap-2">
+            <span>Selanjutnya</span>
+            <i class="fa-solid fa-arrow-right"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Shortcuts Guidance -->
+      <div class="mt-4 flex items-center gap-3 text-[11px] font-mono text-slate-500">
+        <span>Gunakan Keyboard:</span>
+        <span class="bg-slate-900 border border-slate-800 px-1.5 py-0.5 rounded text-slate-400">&larr;</span>
+        <span class="bg-slate-900 border border-slate-800 px-1.5 py-0.5 rounded text-slate-400">&rarr;</span>
+        <span>atau</span>
+        <span class="bg-slate-900 border border-slate-800 px-1.5 py-0.5 rounded text-slate-400">Space</span>
+        <span>untuk navigasi cepat</span>
+      </div>
+    </div>
+  </main>
+
+  <!-- ======================================================== -->
+  <!-- VIEW 2: SCROLLABLE WEB READER MODE                       -->
+  <!-- ======================================================== -->
+  <main id="scrollView" class="hidden flex-1 max-w-4xl mx-auto px-4 sm:px-6 py-12 space-y-16">
+    
+    <!-- Hero Header -->
+    <header class="text-center space-y-4">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-500/10 border border-brand-400/30 text-brand-400 text-xs font-mono">
+        <i class="fa-solid fa-layer-group"></i> Dokumentasi Komprehensif
+      </div>
+      <h1 class="text-4xl sm:text-5xl font-extrabold font-display text-white tracking-tight">
+        Cyber Law &amp; Regulasi UU ITE di Indonesia
+      </h1>
+      <p class="text-slate-400 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed">
+        Panduan ringkas dan lugas memahami payung hukum siber, evolusi regulasi hingga UU 1/2024, serta implementasi etika profesi praktisi IT.
+      </p>
+    </header>
+
+    <!-- Section 1 -->
+    <section class="glass-panel rounded-2xl p-6 sm:p-8 border border-brand-border space-y-4">
+      <div class="flex items-center gap-3">
+        <span class="font-mono text-brand-400 text-sm font-bold">01.</span>
+        <h2 class="text-2xl font-bold font-display text-white">Apa Itu Cyber Law &amp; Urgensinya?</h2>
+      </div>
+      <p class="text-slate-300 leading-relaxed">
+        <strong>Cyber Law</strong> (Hukum Siber) adalah payung aturan legal yang mengikat segala bentuk aktivitas di ruang siber—mencakup komputasi awan, media komunikasi digital, pertukaran data elektronik, sampai transaksi e-commerce.
+      </p>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+        <div class="bg-slate-900/80 p-4 rounded-xl border border-slate-800">
+          <div class="text-brand-400 font-bold text-sm mb-1 flex items-center gap-2">
+            <i class="fa-solid fa-shield-halved"></i> Mengapa Sangat Dibutuhkan?
+          </div>
+          <p class="text-xs text-slate-400 leading-normal">
+            Tanpa batas yuridis yang tegas, ekosistem internet akan dipenuhi kejahatan tanpa hukuman: pencurian identitas, kebocoran data, pemerasan siber, hingga perusakan infrastruktur digital publik.
+          </p>
+        </div>
+        <div class="bg-slate-900/80 p-4 rounded-xl border border-slate-800">
+          <div class="text-emerald-400 font-bold text-sm mb-1 flex items-center gap-2">
+            <i class="fa-solid fa-signature"></i> Pilar yang Diatur
+          </div>
+          <p class="text-xs text-slate-400 leading-normal">
+            Validitas tanda tangan digital, kontrak elektronik, kepemilikan hak cipta digital, yurisdiksi lintas batas, dan penegakan hukum kejahatan siber (*cybercrime*).
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2 -->
+    <section class="glass-panel rounded-2xl p-6 sm:p-8 border border-brand-border space-y-6">
+      <div class="flex items-center gap-3">
+        <span class="font-mono text-brand-400 text-sm font-bold">02.</span>
+        <h2 class="text-2xl font-bold font-display text-white">Trilogi Evolusi UU ITE</h2>
+      </div>
+      <div class="space-y-4">
+        <div class="p-4 rounded-xl bg-slate-900/60 border-l-4 border-cyan-500 border-y border-r border-slate-800">
+          <div class="flex justify-between items-center mb-1">
+            <h3 class="font-bold text-white text-base">UU No. 11 Tahun 2008</h3>
+            <span class="text-xs font-mono text-cyan-400 font-semibold">Fondasi Awal</span>
+          </div>
+          <p class="text-xs text-slate-400 leading-relaxed">
+            Menjadi undang-undang siber pertama Indonesia. Melegalkan alat bukti elektronik dan merumuskan tindak pidana digital seperti peretasan dan manipulasi data.
+          </p>
+        </div>
+
+        <div class="p-4 rounded-xl bg-slate-900/60 border-l-4 border-indigo-500 border-y border-r border-slate-800">
+          <div class="flex justify-between items-center mb-1">
+            <h3 class="font-bold text-white text-base">UU No. 19 Tahun 2016</h3>
+            <span class="text-xs font-mono text-indigo-400 font-semibold">Revisi Pertama</span>
+          </div>
+          <p class="text-xs text-slate-400 leading-relaxed">
+            Menurunkan ancaman pidana Pasal 27 ayat 3 (pencemaran nama baik) menjadi 4 tahun agar tidak dapat langsung ditahan, menegaskan delik aduan absolut, serta memasukkan konsep hak penghapusan data (*the right to be forgotten*).
+          </p>
+        </div>
+
+        <div class="p-4 rounded-xl bg-slate-900/60 border-l-4 border-emerald-500 border-y border-r border-slate-800">
+          <div class="flex justify-between items-center mb-1">
+            <h3 class="font-bold text-white text-base">UU No. 1 Tahun 2024</h3>
+            <span class="text-xs font-mono text-emerald-400 font-semibold">Revisi Kedua (Terkini)</span>
+          </div>
+          <p class="text-xs text-slate-400 leading-relaxed">
+            Pembaruan modern yang mengedepankan *restorative justice* (perdamaian mediasi), regulasi khusus perlindungan anak di ranah daring, perlindungan transaksi bernilai tinggi, dan sinkronisasi dengan UU PDP.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3 -->
+    <section class="glass-panel rounded-2xl p-6 sm:p-8 border border-brand-border space-y-4">
+      <div class="flex items-center gap-3">
+        <span class="font-mono text-brand-400 text-sm font-bold">03.</span>
+        <h2 class="text-2xl font-bold font-display text-white">5 Asas Pokok UU ITE (Pasal 3)</h2>
+      </div>
+      <p class="text-slate-300 text-sm">
+        Rumus hafalan cepat: <span class="font-mono text-brand-400 font-bold">Pasti • Manfaat • Hati-hati • Baik • Netral</span>
+      </p>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-3 pt-2">
+        <div class="bg-slate-900/70 p-4 rounded-xl border border-slate-800">
+          <h4 class="font-bold text-white text-sm mb-1">1. Kepastian Hukum</h4>
+          <p class="text-xs text-slate-400">Menjamin validitas yuridis dokumen dan transaksi digital sejajar dengan bukti kertas konvensional.</p>
+        </div>
+        <div class="bg-slate-900/70 p-4 rounded-xl border border-slate-800">
+          <h4 class="font-bold text-white text-sm mb-1">2. Kemanfaatan</h4>
+          <p class="text-xs text-slate-400">Pengembangan teknologi wajib mendatangkan nilai tambah dan kemakmuran sosial masyarakat.</p>
+        </div>
+        <div class="bg-slate-900/70 p-4 rounded-xl border border-slate-800">
+          <h4 class="font-bold text-white text-sm mb-1">3. Kehati-hatian</h4>
+          <p class="text-xs text-slate-400">Pengembang maupun pengguna wajib mengantisipasi risiko kegagalan sistem dan keamanan data.</p>
+        </div>
+        <div class="bg-slate-900/70 p-4 rounded-xl border border-slate-800">
+          <h4 class="font-bold text-white text-sm mb-1">4. Iktikad Baik</h4>
+          <p class="text-xs text-slate-400">Hubungan interaksi digital wajib dilandasi transparansi, kejujuran, dan tanpa tipu muslihat terselubung.</p>
+        </div>
+        <div class="bg-slate-900/70 p-4 rounded-xl border border-slate-800 md:col-span-2">
+          <h4 class="font-bold text-white text-sm mb-1">5. Netralitas Teknologi</h4>
+          <p class="text-xs text-slate-400">Hukum tidak terikat pada satu platform atau merek spesifik, sehingga klausul tetap relevan baik di masa Cloud, Blockchain, AI, maupun teknologi masa depan.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 4 -->
+    <section class="glass-panel rounded-2xl p-6 sm:p-8 border border-brand-border space-y-4">
+      <div class="flex items-center gap-3">
+        <span class="font-mono text-brand-400 text-sm font-bold">04.</span>
+        <h2 class="text-2xl font-bold font-display text-white">Etika Profesi: Batas Hukum vs Moral</h2>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
+        <div class="border border-slate-700 p-5 rounded-xl bg-slate-900/50">
+          <span class="text-xs uppercase font-mono tracking-wider text-rose-400 font-bold block mb-1">Hukum (Standar Minimum)</span>
+          <h3 class="text-lg font-bold text-white mb-2">Batas yang Dilarang</h3>
+          <p class="text-xs text-slate-300 leading-relaxed">
+            Menentukan hal-hal yang tidak boleh dilakukan dengan sanksi penjara atau denda. Kita taat karena adanya sanksi dan aparat hukum.
+          </p>
+        </div>
+        <div class="border border-brand-500/50 p-5 rounded-xl bg-brand-950/20">
+          <span class="text-xs uppercase font-mono tracking-wider text-brand-400 font-bold block mb-1">Etika (Standar Keunggulan)</span>
+          <h3 class="text-lg font-bold text-white mb-2">Integritas Moral Praktisi</h3>
+          <p class="text-xs text-slate-300 leading-relaxed">
+            Memilih melakukan yang benar walaupun sistem mengizinkan kita berbuat curang tanpa ketahuan (misalnya hak istimewa *root / admin* database).
+          </p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ======================================================== -->
+  <!-- VIEW 3: SIMULASI KASUS & QUIZ INTERAKTIF                 -->
+  <!-- ======================================================== -->
+  <main id="simView" class="hidden flex-1 max-w-4xl mx-auto px-4 sm:px-6 py-10 space-y-8">
+    <div class="text-center space-y-2">
+      <span class="text-xs font-mono font-semibold uppercase text-brand-400 bg-brand-500/10 px-3 py-1 rounded-full border border-brand-500/30">
+        Hands-on Simulator
+      </span>
+      <h2 class="text-3xl font-display font-bold text-white">Studi Kasus Etika &amp; Hukum Siber</h2>
+      <p class="text-slate-400 text-sm max-w-xl mx-auto">
+        Uji intuisi dan pemahaman Anda sebagai praktisi IT dalam menghadapi dilema hukum dan moral nyata.
+      </p>
+    </div>
+
+    <!-- Interactive Case Card -->
+    <div class="glass-panel rounded-2xl p-6 sm:p-8 border border-brand-border space-y-6">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+        <div>
+          <span class="text-xs text-slate-400 uppercase font-mono">Dilema Skenario</span>
+          <h3 class="text-xl font-bold text-white">Kasus: Akses Data Konsumen Tanpa Tiket Tugas</h3>
+        </div>
+        <span class="px-2.5 py-1 rounded-md text-xs font-mono font-bold bg-amber-500/10 text-amber-400 border border-amber-500/30">Tingkat: Medium</span>
+      </div>
+
+      <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800 text-sm text-slate-300 leading-relaxed">
+        <p class="mb-2">
+          <strong>Deskripsi:</strong> Anda adalah seorang <em>Senior Backend Engineer</em> di aplikasi ride-hailing ternama. Teman akrab Anda curiga pasangannya selingkuh dan meminta bantuan Anda untuk melihat histori perjalanan akun pasangannya malam kemarin dari database.
+        </p>
+        <p class="text-xs text-slate-400 italic">
+          Catatan: Anda memiliki akses query database production tanpa perlu persetujuan bertingkat (tidak ada audit log real-time).
+        </p>
+      </div>
+
+      <div class="space-y-3">
+        <p class="text-xs font-mono text-slate-400 uppercase tracking-wider font-semibold">Tentukan Keputusan Anda:</p>
+        
+        <button onclick="handleSimChoice(1)" class="w-full text-left p-4 rounded-xl bg-slate-900 hover:bg-slate-850 border border-slate-800 hover:border-brand-500/50 transition duration-200 group flex items-start gap-3">
+          <span class="w-6 h-6 rounded-full bg-slate-800 text-slate-300 flex items-center justify-center font-mono text-xs font-bold group-hover:bg-brand-500 group-hover:text-slate-950">A</span>
+          <div>
+            <div class="text-sm font-semibold text-white group-hover:text-brand-300">Bantu teman karena tidak ada yang dirugikan secara fisik dan log server tidak memonitor query Anda.</div>
+            <div class="text-xs text-slate-400 mt-1">Mengutamakan hubungan pertemanan karena risiko ketahuan sangat minim.</div>
+          </div>
+        </button>
+
+        <button onclick="handleSimChoice(2)" class="w-full text-left p-4 rounded-xl bg-slate-900 hover:bg-slate-850 border border-slate-800 hover:border-brand-500/50 transition duration-200 group flex items-start gap-3">
+          <span class="w-6 h-6 rounded-full bg-slate-800 text-slate-300 flex items-center justify-center font-mono text-xs font-bold group-hover:bg-brand-500 group-hover:text-slate-950">B</span>
+          <div>
+            <div class="text-sm font-semibold text-white group-hover:text-brand-300">Tolak tegas permintaan tersebut dan jelaskan pelanggaran hukum &amp; etika privasi.</div>
+            <div class="text-xs text-slate-400 mt-1">Menjaga kerahasiaan data sesuai Pasal 30 UU ITE dan regulasi UU Perlindungan Data Pribadi (UU PDP).</div>
+          </div>
+        </button>
+
+        <button onclick="handleSimChoice(3)" class="w-full text-left p-4 rounded-xl bg-slate-900 hover:bg-slate-850 border border-slate-800 hover:border-brand-500/50 transition duration-200 group flex items-start gap-3">
+          <span class="w-6 h-6 rounded-full bg-slate-800 text-slate-300 flex items-center justify-center font-mono text-xs font-bold group-hover:bg-brand-500 group-hover:text-slate-950">C</span>
+          <div>
+            <div class="text-sm font-semibold text-white group-hover:text-brand-300">Hanya melihat sekilas lalu memberitahukan secara lisan tanpa mengirimkan tangkapan layar.</div>
+            <div class="text-xs text-slate-400 mt-1">Mengira tidak adanya bukti fisik/screenshot menghindarkan dari jerat pidana digital.</div>
+          </div>
+        </button>
+      </div>
+
+      <!-- Feedback Banner Box -->
+      <div id="simFeedback" class="hidden p-5 rounded-xl border transition-all duration-300">
+        <!-- Injected by JavaScript -->
+      </div>
+    </div>
+  </main>
+
+  <!-- ======================================================== -->
+  <!-- MODAL: PRESENTER NOTES (CATATAN PEMBICARA)               -->
+  <!-- ======================================================== -->
+  <div id="notesModal" class="hidden fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-slate-900 border border-brand-border rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-4">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <div class="flex items-center gap-2 text-brand-400 font-mono text-xs font-bold uppercase">
+          <i class="fa-solid fa-microphone-lines"></i> Naskah Bicara Presenter
+        </div>
+        <button onclick="togglePresenterNotes()" class="text-slate-400 hover:text-white">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div>
+        <h4 id="notesTitle" class="text-base font-bold text-white mb-2">Slide 1: Pengantar</h4>
+        <div id="notesBody" class="text-slate-300 text-sm leading-relaxed max-h-64 overflow-y-auto pr-2 space-y-2">
+          <!-- Populated dynamically -->
+        </div>
+      </div>
+      <div class="pt-2 border-t border-slate-800 flex justify-between items-center text-xs text-slate-400 font-mono">
+        <span>Gunakan ini saat giliran kelompok bicara</span>
+        <button onclick="togglePresenterNotes()" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-white font-sans text-xs">Tutup</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-slate-800/80 py-4 px-6 text-center text-xs text-slate-500 font-mono">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
+      <div>Presentasi Kelompok: Cyber Law &amp; UU ITE &copy; 2024</div>
+      <div class="flex items-center gap-4">
+        <span>Undang-Undang No. 1 Tahun 2024</span>
+        <span>&bull;</span>
+        <span>Kode Etik Profesional IT</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- JAVASCRIPT LOGIC -->
+  <script>
+    // SLIDE DATA STORE
+    const slidesData = [
+      {
+        id: 1,
+        category: "Cover & Identitas",
+        title: "Cyber Law &amp; UU ITE",
+        subtitle: "Fondasi Kepastian Hukum, Integritas Digital, dan Etika Profesi Teknologi",
+        badge: "Bahan Paparan Kelompok",
+        notes: "Ucapkan pembuka: 'Selamat pagi/siang rekan-rekan dan dosen. Pernah tidak kalian melihat berita akun diretas, order fiktif, atau kebocoran data? Hari ini kelompok kami akan mengupas tuntas payung hukum siber Indonesia (UU ITE) dan bagaimana kita sebagai calon praktisi IT menyikapinya dengan etika.'",
+        render: function() {
+          return `
+            <div class="flex flex-col justify-between h-full">
+              <div class="flex justify-between items-center">
+                <span class="inline-flex items-center gap-2 text-xs font-mono text-brand-400 bg-brand-500/10 border border-brand-500/20 px-3 py-1 rounded-full uppercase tracking-wider">
+                  <i class="fa-solid fa-code-branch"></i> Kuliah Etika Profesi IT
+                </span>
+                <span class="text-xs text-slate-400 font-mono">Versi Pembaruan UU 1/2024</span>
+              </div>
+
+              <div class="my-auto space-y-4 max-w-3xl">
+                <h1 class="text-4xl sm:text-6xl font-extrabold font-display text-white tracking-tight leading-tight">
+                  Cyber Law &amp; <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-400 to-cyan-200">UU ITE</span>
+                </h1>
+                <p class="text-slate-300 text-base sm:text-xl font-normal leading-relaxed">
+                  Menjembatani kebebasan berinovasi dengan batas legal dan tanggung jawab moral praktisi teknologi informasi.
+                </p>
+                <div class="pt-2 flex flex-wrap gap-2">
+                  <span class="text-xs font-mono bg-slate-900 border border-slate-800 text-slate-300 px-3 py-1.5 rounded-lg flex items-center gap-1.5">
+                    <i class="fa-solid fa-check text-brand-400"></i> UU No. 11/2008
+                  </span>
+                  <span class="text-xs font-mono bg-slate-900 border border-slate-800 text-slate-300 px-3 py-1.5 rounded-lg flex items-center gap-1.5">
+                    <i class="fa-solid fa-check text-brand-400"></i> UU No. 19/2016
+                  </span>
+                  <span class="text-xs font-mono bg-slate-900 border border-brand-500/40 text-brand-300 px-3 py-1.5 rounded-lg flex items-center gap-1.5">
+                    <i class="fa-solid fa-star text-amber-400"></i> Terkini: UU No. 1/2024
+                  </span>
+                </div>
+              </div>
+
+              <div class="pt-4 border-t border-slate-800 flex justify-between items-center text-xs text-slate-400">
+                <span>Kelompok Presentasi Mahasiswa</span>
+                <span class="font-mono text-brand-400">Tekan [Panah Kanan &rarr;] untuk mulai</span>
+              </div>
+            </div>
+          `;
+        }
+      },
+      {
+        id: 2,
+        category: "01 / Definisi Dasar",
+        title: "Apa Itu Cyber Law?",
+        subtitle: "Payung hukum aktivitas manusia di ruang siber",
+        badge: "Konsep Dasar",
+        notes: "Jelaskan: 'Cyber law adalah hukum yang memayungi seluruh aktivitas digital. Mengapa harus ada? Karena internet bukan ruang bebas tanpa hukum. Di sini terjadi transaksi uang, penyimpanan data pribadi, dan pertukaran informasi. Contohnya e-commerce, tanda tangan digital, hingga penindakan peretasan.'",
+        render: function() {
+          return `
+            <div class="flex flex-col justify-between h-full space-y-6">
+              <div>
+                <span class="text-xs font-mono text-brand-400 uppercase tracking-wider block mb-1">Pilar Regulasi Digital</span>
+                <h2 class="text-2xl sm:text-4xl font-bold font-display text-white">Memahami Konsep Dasar Cyber Law</h2>
+              </div>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+                <div class="space-y-4">
+                  <p class="text-slate-200 text-base sm:text-lg leading-relaxed font-medium">
+                    Himpunan aturan hukum yang mengatur setiap interaksi, transaksi finansial elektronik, dan pertukaran data di internet.
+                  </p>
+                  <p class="text-slate-400 text-sm leading-relaxed">
+                    Dunia nyata memiliki hukum pidana dan perdata; dunia siber membutuhkan <strong>Cyber Law</strong> agar ekosistem digital tidak berubah menjadi zona anarki manipulasi dan penipuan tanpa konsekuensi.
+                  </p>
+                </div>
+
+                <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 space-y-3 shadow-inner">
+                  <h3 class="text-xs font-mono uppercase font-bold text-brand-400 tracking-wider">Cakupan Sentral:</h3>
+                  <div class="space-y-2 text-xs sm:text-sm">
+                    <div class="flex items-center gap-3 p-2 rounded-lg bg-slate-950/60 border border-slate-800/80">
+                      <i class="fa-solid fa-cart-shopping text-brand-400 w-4 text-center"></i>
+                      <span><strong>Transaksi Digital:</strong> E-commerce &amp; Smart Contracts</span>
+                    </div>
+                    <div class="flex items-center gap-3 p-2 rounded-lg bg-slate-950/60 border border-slate-800/80">
+                      <i class="fa-solid fa-fingerprint text-brand-400 w-4 text-center"></i>
+                      <span><strong>Identitas &amp; Autentikasi:</strong> Tanda Tangan Digital</span>
+                    </div>
+                    <div class="flex items-center gap-3 p-2 rounded-lg bg-slate-950/60 border border-slate-800/80">
+                      <i class="fa-solid fa-user-shield text-brand-400 w-4 text-center"></i>
+                      <span><strong>Data &amp; Privasi:</strong> Perlindungan Kerahasiaan Pengguna</span>
+                    </div>
+                    <div class="flex items-center gap-3 p-2 rounded-lg bg-slate-950/60 border border-slate-800/80">
+                      <i class="fa-solid fa-gavel text-brand-400 w-4 text-center"></i>
+                      <span><strong>Penegakan Pidana:</strong> Cybercrime &amp; Forensik Digital</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="p-3 bg-brand-950/40 border border-brand-800/50 rounded-xl text-xs text-brand-300 flex items-center gap-2">
+                <i class="fa-solid fa-circle-info"></i>
+                <span>Di Indonesia, instrumen hukum utamanya diwujudkan dalam <strong>Undang-Undang Informasi dan Transaksi Elektronik (UU ITE)</strong>.</span>
+              </div>
+            </div>
+          `;
+        }
+      },
+      {
+        id: 3,
+        category: "02 / Sejarah & Kronologi",
+        title: "Perjalanan 3 Dekade UU ITE",
+        subtitle: "Evolusi dinamis merespons laju perkembangan teknologi informasi",
+        badge: "Kronologi Hukum",
+        notes: "Jelaskan: 'UU ITE bukan dokumen kaku, melainkan hukum yang beradaptasi. Ada 3 fase: Lahir tahun 2008 sebagai fondasi, direvisi tahun 2016 untuk memperjelas pasal pencemaran nama baik, dan terakhir direvisi tahun 2024 dengan fokus restorative justice dan perlindungan anak.'",
+        render: function() {
+          return `
+            <div class="flex flex-col justify-between h-full space-y-6">
+              <div>
+                <span class="text-xs font-mono text-brand-400 uppercase tracking-wider block mb-1">Evolusi Yuridis</span>
+                <h2 class="text-2xl sm:text-3xl font-bold font-display text-white">Bagaimana Regulasi ITE Berkembang?</h2>
+              </div>
+
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <!-- 2008 -->
+                <div class="p-5 rounded-2xl bg-slate-900/80 border border-slate-800 flex flex-col justify-between space-y-3">
+                  <div>
+                    <span class="text-2xl font-display font-bold text-brand-400">2008</span>
+                    <h3 class="font-bold text-white text-base mt-1">UU No. 11 / 2008</h3>
+                    <p class="text-xs text-slate-400 mt-2 leading-relaxed">
+                      Tonggak pertama di Indonesia. Mengakui alat bukti elektronik di pengadilan serta mendefinisikan tindak kejahatan siber pertama kalinya.
+                    </p>
+                  </div>
+                  <span class="text-[11px] font-mono text-slate-400 uppercase font-semibold bg-slate-950 px-2 py-1 rounded w-fit border border-slate-800">Fase Fondasi</span>
+                </div>
+
+                <!-- 2016 -->
+                <div class="p-5 rounded-2xl bg-slate-900/80 border border-slate-800 flex flex-col justify-between space-y-3">
+                  <div>
+                    <span class="text-2xl font-display font-bold text-brand-400">2016</span>
+                    <h3 class="font-bold text-white text-base mt-1">UU No. 19 / 2016</h3>
+                    <p class="text-xs text-slate-400 mt-2 leading-relaxed">
+                      Koreksi pasal karet defamasi (Pasal 27 ayat 3 diturunkan hukumannya jadi 4 tahun agar tidak bisa langsung ditahan), delik aduan absolut, dan hak penghapusan data.
+                    </p>
+                  </div>
+                  <span class="text-[11px] font-mono text-slate-400 uppercase font-semibold bg-slate-950 px-2 py-1 rounded w-fit border border-slate-800">Revisi Pertama</span>
+                </div>
+
+                <!-- 2024 -->
+                <div class="p-5 rounded-2xl bg-gradient-to-b from-slate-900 to-brand-950/40 border border-brand-500/40 flex flex-col justify-between space-y-3">
+                  <div>
+                    <span class="text-2xl font-display font-bold text-cyan-300">2024</span>
+                    <h3 class="font-bold text-white text-base mt-1">UU No. 1 / 2024</h3>
+                    <p class="text-xs text-slate-300 mt-2 leading-relaxed">
+                      Pembaruan mutakhir: Restorative Justice (perdamaian sengketa), proteksi anak di dunia maya, klausul kejelasan kontrak digital, dan harmonisasi UU PDP.
+                    </p>
+                  </div>
+                  <span class="text-[11px] font-mono text-brand-300 uppercase font-semibold bg-brand-950 px-2 py-1 rounded w-fit border border-brand-800/80">Regulasi Terkini</span>
+                </div>
+              </div>
+
+              <div class="text-xs text-slate-400 italic text-center">
+                *Ketiga undang-undang ini dibaca secara komplementer (saling melengkapi satu sama lain).
+              </div>
+            </div>
+          `;
+        }
+      },
+      {
+        id: 4,
+        category: "03 / Landasan Prinsip",
+        title: "5 Asas Pokok UU ITE (Pasal 3)",
+        subtitle: "Prinsip kompas dalam memanfaatkan teknologi di ruang publik",
+        badge: "Pasal 3",
+        notes: "Tips ingat cepat: 'Pasti, Manfaat, Hati-hati, Baik, Netral'. Jelaskan contoh netral teknologi: Aturan berlaku sama baik untuk sistem berbasis website, aplikasi smartphone, maupun smart contracts di blockchain.",
+        render: function() {
+          return `
+            <div class="flex flex-col justify-between h-full space-y-6">
+              <div class="flex justify-between items-end">
+                <div>
+                  <span class="text-xs font-mono text-brand-400 uppercase tracking-wider block mb-1">Prinsip Fundamental</span>
+                  <h2 class="text-2xl sm:text-3xl font-bold font-display text-white">5 Asas Penyelenggaraan (Pasal 3)</h2>
+                </div>
+                <span class="text-xs font-mono text-slate-400 bg-slate-900 px-3 py-1.5 rounded-lg border border-slate-800 hidden sm:block">
+                  Jembatan Pengingat: <strong>PMHBN</strong>
+                </span>
+              </div>
+
+              <div class="grid grid-cols-2 sm:grid-cols-5 gap-3">
+                <div class="p-4 rounded-xl bg-slate-900 border border-slate-800 text-center flex flex-col items-center justify-between">
+                  <div class="w-10 h-10 rounded-full bg-brand-500/10 text-brand-400 flex items-center justify-center text-lg mb-2">
+                    <i class="fa-solid fa-scale-balanced"></i>
+                  </div>
+                  <h4 class="font-bold text-sm text-white">Kepastian</h4>
+                  <p class="text-[11px] text-slate-400 mt-2 leading-tight">Keabsahan hukum kontrak &amp; bukti digital.</p>
+                </div>
+
+                <div class="p-4 rounded-xl bg-slate-900 border border-slate-800 text-center flex flex-col items-center justify-between">
+                  <div class="w-10 h-10 rounded-full bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-lg mb-2">
+                    <i class="fa-solid fa-hand-holding-heart"></i>
+                  </div>
+                  <h4 class="font-bold text-sm text-white">Kemanfaatan</h4>
+                  <p class="text-[11px] text-slate-400 mt-2 leading-tight">Teknologi wajib bawa faedah bagi masyarakat.</p>
+                </div>
+
+                <div class="p-4 rounded-xl bg-slate-900 border border-slate-800 text-center flex flex-col items-center justify-between">
+                  <div class="w-10 h-10 rounded-full bg-amber-500/10 text-amber-400 flex items-center justify-center text-lg mb-2">
+                    <i class="fa-solid fa-shield-halved"></i>
+                  </div>
+                  <h4 class="font-bold text-sm text-white">Kehati-hatian</h4>
+                  <p class="text-[11px] text-slate-400 mt-2 leading-tight">Mitigasi risiko sebelum bertindak atau merilis sistem.</p>
+                </div>
+
+                <div class="p-4 rounded-xl bg-slate-900 border border-slate-800 text-center flex flex-col items-center justify-between">
+                  <div class="w-10 h-10 rounded-full bg-indigo-500/10 text-indigo-400 flex items-center justify-center text-lg mb-2">
+                    <i class="fa-solid fa-handshake"></i>
+                  </div>
+                  <h4 class="font-bold text-sm text-white">Iktikad Baik</h4>
+                  <p class="text-[11px] text-slate-400 mt-2 leading-tight">Transaksi jujur tanpa motif penipuan tersembunyi.</p>
+                </div>
+
+                <div class="p-4 rounded-xl bg-slate-900 border border-slate-800 text-center flex flex-col items-center justify-between col-span-2 sm:col-span-1">
+                  <div class="w-10 h-10 rounded-full bg-rose-500/10 text-rose-400 flex items-center justify-center text-lg mb-2">
+                    <i class="fa-solid fa-microchip"></i>
+                  </div>
+                  <h4 class="font-bold text-sm text-white">Netralitas</h4>
+                  <p class="text-[11px] text-slate-400 mt-2 leading-tight">Bebas platform: Cloud, AI, hingga Blockchain.</p>
+                </div>
+              </div>
+
+              <div class="p-4 bg-slate-900/60 border border-slate-800 rounded-xl text-xs text-slate-300 leading-relaxed">
+                <strong>Poin Penting:</strong> Asas <em>Netralitas Teknologi</em> menjamin UU ITE tidak usang meskipun muncul tren AI baru, karena hukum mengikat perilakunya, bukan nama software atau protokolnya.
+              </div>
+            </div>
+          `;
+        }
+      },
+      {
+        id: 5,
+        category: "04 / Visi & Misi",
+        title: "Tujuan Strategis UU ITE (Pasal 4)",
+        subtitle: "Arah transformasi digital nasional Indonesia",
+        badge: "Pasal 4",
+        notes: "Ucapkan kesimpulan satu kalimat: 'Intinya UU ITE hadir bukan untuk mengekang inovasi, melainkan memastikan dunia digital kita terus bertumbuh secara sehat, adil, dan terpercaya bagi seluruh rakyat.'",
+        render: function() {
+          return `
+            <div class="flex flex-col justify-between h-full space-y-6">
+              <div>
+                <span class="text-xs font-mono text-brand-400 uppercase tracking-wider block mb-1">Tujuan Strategis Bangsa</span>
+                <h2 class="text-2xl sm:text-3xl font-bold font-display text-white">Misi Pembentukan Regulasi (Pasal 4)</h2>
+              </div>
+
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                <div class="p-5 rounded-2xl bg-slate-900/80 border-t-4 border-brand-400 border-x border-b border-slate-800 space-y-2">
+                  <i class="fa-solid fa-graduation-cap text-2xl text-brand-400 mb-1"></i>
+                  <h3 class="font-bold text-white text-base">Mencerdaskan Bangsa</h3>
+                  <p class="text-xs text-slate-400 leading-relaxed">
+                    Mendorong literasi digital warga negara agar sanggup bersaing dan aktif berkontribusi dalam peradaban informasi global.
+                  </p>
+                </div>
+
+                <div class="p-5 rounded-2xl bg-slate-900/80 border-t-4 border-emerald-400 border-x border-b border-slate-800 space-y-2">
+                  <i class="fa-solid fa-chart-line text-2xl text-emerald-400 mb-1"></i>
+                  <h3 class="font-bold text-white text-base">Ekonomi Digital</h3>
+                  <p class="text-xs text-slate-400 leading-relaxed">
+                    Menstimulasi perdagangan elektronik nasional, membuka pasar UKM online, serta memastikan kepastian bisnis yang sehat.
+                  </p>
+                </div>
+
+                <div class="p-5 rounded-2xl bg-slate-900/80 border-t-4 border-cyan-400 border-x border-b border-slate-800 space-y-2">
+                  <i class="fa-solid fa-building-columns text-2xl text-cyan-400 mb-1"></i>
+                  <h3 class="font-bold text-white text-base">Efisiensi Layanan</h3>
+                  <p class="text-xs text-slate-400 leading-relaxed">
+                    Modernisasi birokrasi pemerintahan dan layanan publik lewat integrasi e-Government yang transparan dan bebas pungli.
+                  </p>
+                </div>
+              </div>
+
+              <div class="p-4 rounded-xl bg-gradient-to-r from-slate-900 via-brand-950/60 to-slate-900 border border-slate-800 flex items-center justify-between">
+                <p class="text-sm text-slate-200 font-medium">
+                  &ldquo;UU ITE dirancang agar ekosistem digital tumbuh pesat dengan jaminan rasa aman bagi warganya.&rdquo;
+                </p>
+                <i class="fa-solid fa-quote-right text-brand-500/40 text-3xl ml-4"></i>
+              </div>
+            </div>
+          `;
+        }
+      },
+      {
+        id: 6,
+        category: "05 / Larangan & Pidana",
+        title: "Perbuatan yang Dilarang",
+        subtitle: "Tindakan kriminal digital yang diancam pidana kurungan dan denda",
+        badge: "Delik Siber",
+        notes: "Bagi perbuatan ke dalam 2 klaster besar: Kejahatan terhadap Sistem (hacking, cracking, penyadapan) dan Penyalahgunaan Konten (asusila, hoax bermuatan SARA, ancaman pemerasan). Jangan lupa sebutkan bahwa UU 1/2024 mengedepankan mediasi kekeluargaan untuk kasus nama baik.",
+        render: function() {
+          return `
+            <div class="flex flex-col justify-between h-full space-y-6">
+              <div>
+                <span class="text-xs font-mono text-rose-400 uppercase tracking-wider block mb-1">Batasan Hukum Tegas</span>
+                <h2 class="text-2xl sm:text-3xl font-bold font-display text-white">Perbuatan yang Dilarang UU ITE</h2>
+              </div>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <!-- Klaster 1 -->
+                <div class="p-5 rounded-2xl bg-slate-900/90 border border-rose-900/30 space-y-3">
+                  <div class="flex items-center gap-2 text-rose-400 font-bold text-sm">
+                    <i class="fa-solid fa-terminal"></i> Kejahatan Sistem Komputer (Cybercrime)
+                  </div>
+                  <ul class="text-xs text-slate-300 space-y-2.5">
+                    <li class="flex items-start gap-2">
+                      <span class="text-rose-400 font-mono font-bold">&bull;</span>
+                      <div><strong>Illegal Access (Pasal 30):</strong> Membobol/masuk ke akun atau server orang lain tanpa wewenang.</div>
+                    </li>
+                    <li class="flex items-start gap-2">
+                      <span class="text-rose-400 font-mono font-bold">&bull;</span>
+                      <div><strong>Interception (Pasal 31):</strong> Penyadapan transmisi data/informasi tertutup.</div>
+                    </li>
+                    <li class="flex items-start gap-2">
+                      <span class="text-rose-400 font-mono font-bold">&bull;</span>
+                      <div><strong>Data Tampering (Pasal 32):</strong> Mengubah, merusak, atau menyembunyikan dokumen elektronik.</div>
+                    </li>
+                  </ul>
+                </div>
+
+                <!-- Klaster 2 -->
+                <div class="p-5 rounded-2xl bg-slate-900/90 border border-amber-900/30 space-y-3">
+                  <div class="flex items-center gap-2 text-amber-400 font-bold text-sm">
+                    <i class="fa-solid fa-bullhorn"></i> Penyalahgunaan Konten &amp; Informasi
+                  </div>
+                  <ul class="text-xs text-slate-300 space-y-2.5">
+                    <li class="flex items-start gap-2">
+                      <span class="text-amber-400 font-mono font-bold">&bull;</span>
+                      <div><strong>Kesusilaan &amp; Pornografi (Pasal 27 ayat 1):</strong> Distribusi materi asusila digital.</div>
+                    </li>
+                    <li class="flex items-start gap-2">
+                      <span class="text-amber-400 font-mono font-bold">&bull;</span>
+                      <div><strong>Pencemaran &amp; Fitnah (Pasal 27A UU 1/2024):</strong> Penghinaan kehormatan individu di media daring.</div>
+                    </li>
+                    <li class="flex items-start gap-2">
+                      <span class="text-amber-400 font-mono font-bold">&bull;</span>
+                      <div><strong>Hoaks &amp; SARA (Pasal 28):</strong> Penyebaran kabar bohong yang memicu kerugian finansial atau kebencian antargolongan.</div>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="p-3.5 bg-slate-950 border border-slate-800 rounded-xl flex items-center justify-between text-xs text-slate-400">
+                <span>Konsekuensi Pidana: Sanksi penjara hingga 12 tahun dan denda miliaran rupiah.</span>
+                <span class="text-emerald-400 font-mono font-semibold">UU 1/2024: Restorative Justice</span>
+              </div>
+            </div>
+          `;
+        }
+      },
+      {
+        id: 7,
+        category: "06 / Sinergi Regulasi",
+        title: "Bukti Digital &amp; Sinergi UU PDP",
+        subtitle: "Keabsahan barang bukti di pengadilan dan perlindungan privasi data warga",
+        badge: "Teknis & Regulasi",
+        notes: "Soroti Pasal 5: Log server, chat WhatsApp, rekaman database, dan email sah menjadi bukti di pengadilan asal forensik integritasnya terjaga. Tambahkan juga relasi UU PDP (UU No. 27/2022) yang mewajibkan perusahaan menjaga kebocoran database.",
+        render: function() {
+          return `
+            <div class="flex flex-col justify-between h-full space-y-6">
+              <div>
+                <span class="text-xs font-mono text-brand-400 uppercase tracking-wider block mb-1">Penguatan Bukti &amp; Privasi</span>
+                <h2 class="text-2xl sm:text-3xl font-bold font-display text-white">Bukti Digital &amp; UU PDP (UU 27/2022)</h2>
+              </div>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Bukti Digital -->
+                <div class="p-5 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-3">
+                  <div class="flex items-center gap-2 text-cyan-400 font-bold text-sm">
+                    <i class="fa-solid fa-file-shield"></i> Kekuatan Bukti Digital (Pasal 5)
+                  </div>
+                  <p class="text-xs text-slate-300 leading-relaxed">
+                    Informasi elektronik, log transmisi server, email, rekaman CCTV digital, dan tangkapan layar diakui sah sebagai alat bukti di peradilan Indonesia.
+                  </p>
+                  <div class="flex flex-wrap gap-2 pt-1">
+                    <span class="text-[11px] bg-slate-950 text-slate-300 border border-slate-800 px-2 py-1 rounded">Syarat Integritas Data</span>
+                    <span class="text-[11px] bg-slate-950 text-slate-300 border border-slate-800 px-2 py-1 rounded">Dapat Diuji Forensik</span>
+                  </div>
+                </div>
+
+                <!-- UU PDP -->
+                <div class="p-5 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-3">
+                  <div class="flex items-center gap-2 text-emerald-400 font-bold text-sm">
+                    <i class="fa-solid fa-id-card-clip"></i> Sinergi UU Perlindungan Data Pribadi
+                  </div>
+                  <p class="text-xs text-slate-300 leading-relaxed">
+                    Bila UU ITE fokus pada keabsahan transaksi dan tindak pidana siber, UU PDP membebankan tanggung jawab hukum pada korporasi/developer untuk menjaga data pengguna dari kebocoran (*data breach*).
+                  </p>
+                  <div class="flex flex-wrap gap-2 pt-1">
+                    <span class="text-[11px] bg-slate-950 text-slate-300 border border-slate-800 px-2 py-1 rounded">Prinsip Privacy by Design</span>
+                    <span class="text-[11px] bg-slate-950 text-slate-300 border border-slate-800 px-2 py-1 rounded">Denda Administratif Ganti Rugi</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="p-4 bg-brand-950/30 border border-brand-800/40 rounded-xl text-xs text-slate-300">
+                <strong>Catatan Praktisi:</strong> Programmer bukan lagi sekadar menulis fungsionalitas fitur, melainkan wajib menerapkan standar enkripsi dan kepatuhan hukum (*regulatory compliance*).
+              </div>
+            </div>
+          `;
+        }
+      },
+      {
+        id: 8,
+        category: "07 / Etika vs Hukum",
+        title: "Batas Hukum vs Moral Etika",
+        subtitle: "Hukum adalah batas minimum, etika adalah integritas tertinggi",
+        badge: "Pondasi Moral",
+        notes: "Gunakan analogi ini: 'Hukum membuat kita tidak mencuri karena takut dipenjara. Tapi etika membuat kita tidak mengintip data user yang terbuka lebar meskipun bos kita tidak tahu dan sistem tidak ada CCTV log-nya.'",
+        render: function() {
+          return `
+            <div class="flex flex-col justify-between h-full space-y-6">
+              <div>
+                <span class="text-xs font-mono text-brand-400 uppercase tracking-wider block mb-1">Filsafat Profesi IT</span>
+                <h2 class="text-2xl sm:text-3xl font-bold font-display text-white">Hukum Mencegah Pelanggaran, Etika Membentuk Integritas</h2>
+              </div>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
+                <!-- Hukum -->
+                <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800 flex flex-col justify-between space-y-4">
+                  <div>
+                    <span class="text-xs font-mono font-bold text-slate-400 uppercase tracking-wider">Standar Minimum</span>
+                    <h3 class="text-2xl font-bold text-white mt-1">Kepatuhan Hukum</h3>
+                    <p class="text-xs sm:text-sm text-slate-300 leading-relaxed mt-3">
+                      Menentukan apa yang legal dan dilarang. Jika dilanggar, konsekuensinya adalah penyidikan polisi, kurungan penjara, atau denda ganti rugi.
+                    </p>
+                  </div>
+                  <div class="p-3 bg-slate-950 rounded-xl border border-slate-800 text-xs text-brand-400 font-mono">
+                    &ldquo;Kita tidak melanggar karena ada sanksi tegas aparat.&rdquo;
+                  </div>
+                </div>
+
+                <!-- Etika -->
+                <div class="p-6 rounded-2xl bg-gradient-to-b from-brand-950/60 to-slate-900 border border-brand-500/40 flex flex-col justify-between space-y-4">
+                  <div>
+                    <span class="text-xs font-mono font-bold text-cyan-300 uppercase tracking-wider">Standar Keunggulan</span>
+                    <h3 class="text-2xl font-bold text-white mt-1">Etika Profesional IT</h3>
+                    <p class="text-xs sm:text-sm text-slate-200 leading-relaxed mt-3">
+                      Kompas moral internal. Memilih bertindak jujur dan melindungi pengguna sekalipun sistem teknis memungkinkan kita menyalahgunakannya tanpa pernah ketahuan.
+                    </p>
+                  </div>
+                  <div class="p-3 bg-brand-950 rounded-xl border border-brand-800/80 text-xs text-cyan-300 font-mono">
+                    &ldquo;Kita memilih benar karena martabat dan kode etik profesi.&rdquo;
+                  </div>
+                </div>
+              </div>
+
+              <div class="text-center text-xs text-slate-400 italic">
+                Hukum menghentikan kita menjadi penjahat siber; etika menjadikan kita profesional yang terpercaya.
+              </div>
+            </div>
+          `;
+        }
+      },
+      {
+        id: 9,
+        category: "08 / Implementasi Nyata",
+        title: "Perilaku Etis Praktisi di Industri",
+        subtitle: "Penerapan nyata tanggung jawab profesional teknologi di dunia kerja",
+        badge: "Praktik Kerja",
+        notes: "Jelaskan 4 prinsip: Jangan menyalahgunakan akses admin/root, hormati kerahasiaan NDA klien, uji keamanan aplikasi sebelum diluncurkan, dan selalu verifikasi kebenaran informasi sebelum membagikannya.",
+        render: function() {
+          return `
+            <div class="flex flex-col justify-between h-full space-y-6">
+              <div>
+                <span class="text-xs font-mono text-brand-400 uppercase tracking-wider block mb-1">Aplikasi di Dunia Kerja</span>
+                <h2 class="text-2xl sm:text-3xl font-bold font-display text-white">Kode Perilaku Wajib Praktisi IT</h2>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div class="p-4 rounded-xl bg-slate-900 border border-slate-800 flex gap-3.5">
+                  <div class="w-10 h-10 rounded-lg bg-brand-500/10 text-brand-400 flex items-center justify-center shrink-0">
+                    <i class="fa-solid fa-key"></i>
+                  </div>
+                  <div>
+                    <h4 class="font-bold text-sm text-white">Integritas Hak Akses</h4>
+                    <p class="text-xs text-slate-400 mt-1 leading-relaxed">
+                      Memiliki akses database/root server bukan izin pribadi untuk memata-matai riwayat pesan atau data rahasia pengguna.
+                    </p>
+                  </div>
+                </div>
+
+                <div class="p-4 rounded-xl bg-slate-900 border border-slate-800 flex gap-3.5">
+                  <div class="w-10 h-10 rounded-lg bg-cyan-500/10 text-cyan-400 flex items-center justify-center shrink-0">
+                    <i class="fa-solid fa-shield-halved"></i>
+                  </div>
+                  <div>
+                    <h4 class="font-bold text-sm text-white">Tanggung Jawab Kode &amp; Bug</h4>
+                    <p class="text-xs text-slate-400 mt-1 leading-relaxed">
+                      Wajib menguji celah keamanan (penetration test) secara proaktif, tidak menyembunyikan kelemahan demi mengejar deadline.
+                    </p>
+                  </div>
+                </div>
+
+                <div class="p-4 rounded-xl bg-slate-900 border border-slate-800 flex gap-3.5">
+                  <div class="w-10 h-10 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center shrink-0">
+                    <i class="fa-solid fa-file-contract"></i>
+                  </div>
+                  <div>
+                    <h4 class="font-bold text-sm text-white">Kepatuhan NDA &amp; Privasi</h4>
+                    <p class="text-xs text-slate-400 mt-1 leading-relaxed">
+                      Menjaga kerahasiaan arsitektur software, source code hak cipta perusahaan, dan rahasia dagang klien.
+                    </p>
+                  </div>
+                </div>
+
+                <div class="p-4 rounded-xl bg-slate-900 border border-slate-800 flex gap-3.5">
+                  <div class="w-10 h-10 rounded-lg bg-indigo-500/10 text-indigo-400 flex items-center justify-center shrink-0">
+                    <i class="fa-solid fa-check-double"></i>
+                  </div>
+                  <div>
+                    <h4 class="font-bold text-sm text-white">Verifikasi &amp; Tolak Disinformasi</h4>
+                    <p class="text-xs text-slate-400 mt-1 leading-relaxed">
+                      Menolak terlibat dalam pembuatan bot propaganda kotor, spam massal, atau konten tipuan yang merugikan publik.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="p-3.5 bg-slate-950 border border-slate-800 rounded-xl flex items-center gap-3 text-xs text-slate-300">
+                <i class="fa-solid fa-lightbulb text-amber-400 text-base"></i>
+                <span><strong>Studi Nyata:</strong> Kemampuan teknis membuat Anda diterima kerja; integritas etika menentukan seberapa lama Anda dipercaya memegang peran strategis.</span>
+              </div>
+            </div>
+          `;
+        }
+      },
+      {
+        id: 10,
+        category: "09 / Konklusi & Penutup",
+        title: "Kesimpulan &amp; Sesi Tanya Jawab",
+        subtitle: "Menjadi agen transformasi digital yang berilmu dan berintegritas",
+        badge: "Rangkuman Akhir",
+        notes: "Ucapkan penutup: 'Sebagai kesimpulan, mari kita ingat: Cyber law menjaga ruang digital kita tetap aman, dan etika profesi memastikan kita tidak menyalahgunakan keahlian kita. Terima kasih banyak atas perhatiannya, sekarang sesi tanya jawab dan diskusi kelompok kami buka!'",
+        render: function() {
+          return `
+            <div class="flex flex-col justify-between h-full space-y-6 text-center sm:text-left">
+              <div>
+                <span class="text-xs font-mono text-brand-400 uppercase tracking-wider block mb-1">Rangkuman Pokok</span>
+                <h2 class="text-2xl sm:text-4xl font-bold font-display text-white">3 Intisari Presentasi Hari Ini</h2>
+              </div>
+
+              <div class="space-y-3">
+                <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800 flex items-center gap-4 text-left">
+                  <div class="w-8 h-8 rounded-lg bg-brand-500/20 text-brand-400 font-mono font-bold flex items-center justify-center shrink-0">1</div>
+                  <p class="text-xs sm:text-sm text-slate-300">
+                    <strong>Cyber Law adalah instrumen mutlak:</strong> Menjamin tertib, aman, dan sahnya seluruh transaksi serta pertukaran data di era digital.
+                  </p>
+                </div>
+
+                <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800 flex items-center gap-4 text-left">
+                  <div class="w-8 h-8 rounded-lg bg-brand-500/20 text-brand-400 font-mono font-bold flex items-center justify-center shrink-0">2</div>
+                  <p class="text-xs sm:text-sm text-slate-300">
+                    <strong>UU ITE terus disempurnakan:</strong> Evolusi dari UU 11/2008 ke UU 1/2024 memperkuat hak warga lewat restorative justice dan perlindungan kelompok rentan.
+                  </p>
+                </div>
+
+                <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800 flex items-center gap-4 text-left">
+                  <div class="w-8 h-8 rounded-lg bg-brand-500/20 text-brand-400 font-mono font-bold flex items-center justify-center shrink-0">3</div>
+                  <p class="text-xs sm:text-sm text-slate-300">
+                    <strong>Patuh hukum saja belum cukup:</strong> Seorang profesional sejati dipandu oleh etika moral yang tidak tergoyahkan oleh kesempatan curang.
+                  </p>
+                </div>
+              </div>
+
+              <div class="p-5 rounded-2xl bg-gradient-to-r from-brand-950 via-slate-900 to-brand-950 border border-brand-500/30 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
+                <div>
+                  <h3 class="text-lg font-bold text-white">Ada Tanggapan atau Pertanyaan?</h3>
+                  <p class="text-xs text-slate-400">Sesi diskusi dan tanya jawab kelompok dipersilakan.</p>
+                </div>
+                <button onclick="switchView('sim')" class="px-5 py-2.5 rounded-xl bg-brand-500 hover:bg-brand-400 text-slate-950 font-bold text-xs shadow-lg transition active:scale-95">
+                  Coba Simulasi Kasus &rarr;
+                </button>
+              </div>
+            </div>
+          `;
+        }
+      }
+    ];
+
+    let currentSlide = 0;
+
+    // INITIALIZATION
+    window.addEventListener('DOMContentLoaded', () => {
+      renderSlide(0);
+      buildBullets();
+      setupKeyboard();
+    });
+
+    // RENDER ACTIVE SLIDE
+    function renderSlide(index) {
+      if (index < 0 || index >= slidesData.length) return;
+      currentSlide = index;
+
+      const slide = slidesData[index];
+      const container = document.getElementById('slideDynamicContent');
+      
+      // Animation reset
+      container.style.opacity = '0';
+      container.style.transform = 'translateY(8px)';
+      
+      setTimeout(() => {
+        container.innerHTML = slide.render();
+        container.style.transition = 'all 0.25s ease';
+        container.style.opacity = '1';
+        container.style.transform = 'translateY(0)';
+      }, 150);
+
+      // Update counters & badges
+      document.getElementById('currentSlideNum').textContent = index + 1;
+      document.getElementById('totalSlideNum').textContent = slidesData.length;
+      document.getElementById('slideCategoryBadge').textContent = slide.category;
+
+      // Update Progress Bar
+      const percentage = ((index + 1) / slidesData.length) * 100;
+      document.getElementById('deckProgressBar').style.width = percentage + '%';
+
+      // Update Bullets
+      updateBullets(index);
+
+      // Update Presenter Notes
+      document.getElementById('notesTitle').innerHTML = `Slide ${index + 1}: ${slide.title}`;
+      document.getElementById('notesBody').innerHTML = `<p>${slide.notes}</p>`;
+    }
+
+    function nextSlide() {
+      if (currentSlide < slidesData.length - 1) {
+        renderSlide(currentSlide + 1);
+      }
+    }
+
+    function prevSlide() {
+      if (currentSlide > 0) {
+        renderSlide(currentSlide - 1);
+      }
+    }
+
+    // BULLETS LOGIC
+    function buildBullets() {
+      const container = document.getElementById('deckBullets');
+      container.innerHTML = '';
+      slidesData.forEach((_, idx) => {
+        const dot = document.createElement('button');
+        dot.className = `w-2 h-2 rounded-full transition-all duration-300 ${idx === 0 ? 'bg-brand-400 w-6' : 'bg-slate-700 hover:bg-slate-500'}`;
+        dot.setAttribute('title', `Ke Slide ${idx + 1}`);
+        dot.onclick = () => renderSlide(idx);
+        container.appendChild(dot);
+      });
+    }
+
+    function updateBullets(activeIndex) {
+      const dots = document.getElementById('deckBullets').children;
+      for (let i = 0; i < dots.length; i++) {
+        if (i === activeIndex) {
+          dots[i].className = 'w-6 h-2 rounded-full bg-brand-400 transition-all duration-300';
+        } else {
+          dots[i].className = 'w-2 h-2 rounded-full bg-slate-700 hover:bg-slate-500 transition-all duration-300';
+        }
+      }
+    }
+
+    // VIEW SWITCHER (DECK vs SCROLL READER vs SIMULATOR)
+    function switchView(mode) {
+      const deckView = document.getElementById('deckView');
+      const scrollView = document.getElementById('scrollView');
+      const simView = document.getElementById('simView');
+
+      const navBtnDeck = document.getElementById('navBtnDeck');
+      const navBtnScroll = document.getElementById('navBtnScroll');
+      const navBtnSim = document.getElementById('navBtnSim');
+      const progressBar = document.getElementById('deckProgressBarContainer');
+
+      // Reset Active classes
+      [navBtnDeck, navBtnScroll, navBtnSim].forEach(btn => {
+        btn.className = "px-3.5 py-1.5 rounded-lg text-xs font-semibold text-slate-400 hover:text-white transition-all duration-200 flex items-center gap-2";
+      });
+
+      // Hide all views
+      deckView.classList.add('hidden');
+      scrollView.classList.add('hidden');
+      simView.classList.add('hidden');
+
+      if (mode === 'deck') {
+        deckView.classList.remove('hidden');
+        navBtnDeck.className = "px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all duration-200 flex items-center gap-2 bg-brand-500 text-slate-950 shadow-md";
+        progressBar.style.display = 'block';
+      } else if (mode === 'scroll') {
+        scrollView.classList.remove('hidden');
+        navBtnScroll.className = "px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all duration-200 flex items-center gap-2 bg-brand-500 text-slate-950 shadow-md";
+        progressBar.style.display = 'none';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else if (mode === 'sim') {
+        simView.classList.remove('hidden');
+        navBtnSim.className = "px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all duration-200 flex items-center gap-2 bg-brand-500 text-slate-950 shadow-md";
+        progressBar.style.display = 'none';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }
+
+    // KEYBOARD NAVIGATION
+    function setupKeyboard() {
+      window.addEventListener('keydown', (e) => {
+        // Only if deck mode is active and modal is closed
+        const isDeckActive = !document.getElementById('deckView').classList.contains('hidden');
+        const isModalOpen = !document.getElementById('notesModal').classList.contains('hidden');
+
+        if (isDeckActive && !isModalOpen) {
+          if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+            e.preventDefault();
+            nextSlide();
+          } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+            e.preventDefault();
+            prevSlide();
+          } else if (e.key.toLowerCase() === 'f') {
+            toggleFullScreen();
+          }
+        }
+      });
+    }
+
+    // FULLSCREEN TOGGLE
+    function toggleFullScreen() {
+      const icon = document.getElementById('fsIcon');
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(() => {});
+        icon.className = 'fa-solid fa-compress text-sm';
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen().catch(() => {});
+          icon.className = 'fa-solid fa-expand text-sm';
+        }
+      }
+    }
+
+    // PRESENTER NOTES MODAL TOGGLE
+    function togglePresenterNotes() {
+      const modal = document.getElementById('notesModal');
+      modal.classList.toggle('hidden');
+    }
+
+    // SIMULATOR INTERACTION LOGIC
+    function handleSimChoice(choice) {
+      const feedback = document.getElementById('simFeedback');
+      feedback.classList.remove('hidden');
+
+      if (choice === 1) {
+        feedback.className = "p-5 rounded-xl border border-rose-600/40 bg-rose-950/30 text-rose-200 space-y-2";
+        feedback.innerHTML = `
+          <div class="flex items-center gap-2 font-bold text-sm text-rose-400">
+            <i class="fa-solid fa-triangle-exclamation"></i> KEPUTUSAN SALAH (Pelanggaran Berat!)
+          </div>
+          <p class="text-xs leading-relaxed text-slate-300">
+            Tindakan ini melanggar <strong>Pasal 30 UU ITE</strong> (Illegal Access / Melebihi wewenang tugas) dan <strong>UU PDP No. 27/2022</strong>. Sekalipun tidak ada log audit real-time, Anda melanggar integritas moral etika profesi dan dapat dituntut pidana jika terjadi sengketa hukum di masa depan.
+          </p>
+        `;
+      } else if (choice === 2) {
+        feedback.className = "p-5 rounded-xl border border-emerald-600/40 bg-emerald-950/30 text-emerald-200 space-y-2";
+        feedback.innerHTML = `
+          <div class="flex items-center gap-2 font-bold text-sm text-emerald-400">
+            <i class="fa-solid fa-circle-check"></i> KEPUTUSAN TEPAT (Profesional Berintegritas!)
+          </div>
+          <p class="text-xs leading-relaxed text-slate-300">
+            Luar biasa! Inilah cerminan etika sejati: menolak berbuat salah walau memiliki kekuasaan teknis penuh. Anda patuh pada asas <em>Kehati-hatian</em> dan <em>Iktikad Baik</em> (Pasal 3 UU ITE) serta menjaga hak privasi pelanggan sebagaimana diamanatkan undang-undang.
+          </p>
+        `;
+      } else if (choice === 3) {
+        feedback.className = "p-5 rounded-xl border border-amber-600/40 bg-amber-950/30 text-amber-200 space-y-2";
+        feedback.innerHTML = `
+          <div class="flex items-center gap-2 font-bold text-sm text-amber-400">
+            <i class="fa-solid fa-circle-exclamation"></i> KEPUTUSAN KELIRU (Miskonsepsi Hukum)
+          </div>
+          <p class="text-xs leading-relaxed text-slate-300">
+            Memberitahu secara lisan tetap merupakan kebocoran data terlarang. Sesuai <strong>Pasal 5 UU ITE</strong> dan ketentuan UU PDP, membocorkan informasi pribadi konsumen tanpa dasar hukum tetap dikategorikan sebagai pelanggaran kerahasiaan data berkonsekuensi sanksi pemecatan hingga tuntutan pidana.
+          </p>
+        `;
+      }
+    }
+  </script>
+</body>
+</html>
